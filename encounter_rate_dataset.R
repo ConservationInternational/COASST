@@ -52,9 +52,8 @@ bird_data <- read.csv("../Data_in/coasst_06-01-15_09-09-15.csv")
 #"Bird.Code
 bird_data2 <- bird_data[,c(1,22,23,3,4,5,24,54,58,60,75,78,79,80,89,95,6)]
 
-# Filter the dataset by Is.Survey = Yes and Is.Bird =Yes
-#survey_data <- bird_data2[which(bird_data$Is.Survey =='Yes' & bird_data$Is.Bird == 'Yes'),]
-survey_data <- bird_data2[which(bird_data$Is.Survey =='Yes'),]# & bird_data$Is.Bird == 'Yes'),]
+# Filter the dataset by Is.Survey = Yes 
+survey_data <- bird_data2[which(bird_data$Is.Survey =='Yes'),]
 # JD- Discussion - =! is.bird= 'No' (so will include yes and blanks). Is.bird=blank means no bird
 #found
 # Establish census/month initially and then keep this number for rest of analysis regardless of data slicing
@@ -76,8 +75,8 @@ unique_beach_year_month <- unique(beach_year_month)
 output_df <- survey_data[0,]
 
 # Start the main loop to apply the rules and create an output dataset for all observations
-# by beach and month.  This output dataframe can be used to calculate encounter rate
-# for any data combination/aggregation. Encounter rate per beach/month is also calculated
+# by beach and month.  This output sdataframe can be used to calculate encounter rate
+# for any data combinatiosn/aggregation. Encounter rate per beach/month is also calculated
 # here to compare results with encounter rate calculation function. 
 for (i in 1:length(unique_beach_year_month)) {
   #iterate through each beach and month dataset
@@ -94,17 +93,21 @@ for (i in 1:length(unique_beach_year_month)) {
     beach_date$er_beach[which(beach_date$Bird.Refound == "Yes")] <- 0
     beach_date$case[which(beach_date$Bird.Refound == "Yes")] <-1.1
     
-    # Remove records when no birds were found. Encounter rate should = zero
+    # Do not calculate enconter rate where no birds were found. Encounter rate should = zero
     # Code non bird records with er_include = 0
     beach_date$er_include[which(beach_date$Is.Bird != "Yes")] <-0
-    beach_date$er_beach[which(beach_date$Is.Bird != "Yes")] <- 0 # <- beach_date[-which(beach_date$Is.Bird != "Yes"),]
+    beach_date$er_beach[which(beach_date$Is.Bird != "Yes")] <- 0 
     beach_date$case[which(beach_date$Is.Bird != "Yes")] = 1.2
     
-    # Fina all records that have birds to be included in ER calculation
+    # Find all records that have birds to be included in ER calculation 
+    #0  do not include 1  include for er_include
     beach_date$er_include[which(beach_date$Is.Bird == "Yes" & beach_date$Bird.Refound == "No")] <-1
     beach_date$case[which(beach_date$Is.Bird == "Yes" & beach_date$Bird.Refound == "No")] <- 1.3
+    
     unique_surveys <- unique(beach_date$Survey.Code)
+    #adding in number of surveys for output data
     beach_date$num_survey <- length(unique_surveys) 
+    #calculates er_beach for checking purposes
     beach_date$er_beach <- sum(beach_date$er_include)/(unique(beach_date$Beach.Length)*length(unique_surveys))
     
     # Append to output dataframe
@@ -116,6 +119,7 @@ for (i in 1:length(unique_beach_year_month)) {
     unique_surveys<- unique(beach_date$Survey.Code)
     # Track the number of surveys per beach/month
     beach_date$num_survey <- length(unique_surveys)
+    
     # CASE# 2: MORE THAN ONE SURVEY AND NO REFINDS
     # If survey has no refinds proceed to calculating ER. Verify that a survey
     # dataset has no refinds by: 1) no repeated tie numbers in a month and 2) all Bird.Refound = No and 3) all records have Is.Bird = yes
@@ -123,21 +127,22 @@ for (i in 1:length(unique_beach_year_month)) {
       # Calculate the encounter rate
       beach_date$er_include <- 1
       beach_date$case <- 2
+      #use all birds and divide by length of beach times number of surveys within that month
       beach_date$er_beach <- sum(beach_date$er_include)/(unique(beach_date$Beach.Length)*length(unique_surveys))
       
       # Append to output dataframe
       output_df <- rbind(output_df,beach_date)
     } else {
-      # MORE THAN ONE SURVEY AND REFINDS or No Birds Founds (refinds = Yes or refinds = null)
+      # Case #3:MORE THAN ONE SURVEY AND ANY REFINDS or No Birds Founds (refinds = Yes or refinds = null)
       # Bird.Code = NA; means no birds.
       
       beach_date$er_include[which(beach_date$Is.Bird != "Yes")] <-0
       beach_date$case[which(beach_date$Is.Bird != "Yes")] <-3.1
       
       # Check for inconsistencies in data. Error in tie number
-      if (!("Yes" %in% unique(beach_date$Bird.Refound))) {
-        print(paste("Error. Tie number duplicated in a single survey: unique_beach_year_month index =",i))
-      }
+      #if (!("Yes" %in% unique(beach_date$Bird.Refound))) {
+      #  print(paste("Error. Tie number duplicated in a single survey: unique_beach_year_month index =",i))
+      #}
       # This is duplicated above#########################
       ## Get unique vector of all beach surveys in this beach/month
       #unique_surveys<- unique(beach_date$Survey.Code)
@@ -147,7 +152,7 @@ for (i in 1:length(unique_beach_year_month)) {
       # Create and index and for all refinds
       #refind_index <- which(beach_date$Bird.Refound=="Yes")
       
-      # Case #3: MORE THAN ONE SURVEY PER BEACH/MONTH AND REFINDS 
+      # MORE THAN ONE SURVEY PER BEACH/MONTH AND ANY REFINDS 
       # Remove all refinds when they were initially found in other beach/months
       # Loop through all refinds.
       beach_date_no <-filter(beach_date,Bird.Refound !="Yes")
