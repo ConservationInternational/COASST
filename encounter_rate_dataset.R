@@ -3,7 +3,7 @@
 # Clear everything
 rm(list = ls())
 # Set your working directory
-setwd("~/work/UWCOASST/EncounterRate")
+#setwd("~/work/UWCOASST/EncounterRate")
 
 # General approach
 # Load Data and manipulate for analysis
