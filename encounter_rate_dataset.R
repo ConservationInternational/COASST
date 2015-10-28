@@ -23,8 +23,8 @@ library(dplyr)
 library(data.table)
 # Load snapshot of database on March 30,2015. Replace with SQL connection to 
 # the database
-#bird_data <- read.csv("coasst_06-01-15_09-09-15.csv")
-bird_data <- read.csv("COASST_RAW_AllYrs.csv")
+bird_data <- read.csv("../Data_in/coasst_06-01-15_09-09-15.csv")
+#bird_data <- read.csv("../Data_in/COASST_RAW_AllYrs.csv")
 # Load data for comparison with SAS output
 #bird_data <-read.csv("1314COASST_forEric.csv")
 #bird_data <-read.csv("coasst_11-01-14_03-31-15.csv")
@@ -209,7 +209,7 @@ for (i in 1:length(unique_beach_year_month)) {
 sysdate = Sys.Date()
 filename= paste("output_df",sysdate)
 save(output_df, file=filename,compress="gzip")
-write.csv(output_df,"coast_output_new.csv")
+write.csv(../Data_out/output_df,"coast_output_new.csv")
 
 # Code to quickly find out problems with this script. Find the beach/year/month
 # where there script broke.
