@@ -1,5 +1,5 @@
 # Encounter_rate.r
-#
+
 # Clear everything
 rm(list = ls())
 # Set your working directory
