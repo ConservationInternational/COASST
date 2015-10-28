@@ -65,7 +65,7 @@ f.er.beach.calc <- function(dataset, input_df) {
     #################################################################
     # Send to f.merge. See instructions
     merge_output_df <- f.merge(input_df)
-    ###################
+    ##################
     # Produce a simple output for graphing and data visualization
     final_result_beach<-ddply(merge_output_df, .(Region,Beach.Name,year_month,merge), summarise,
                               er = sum(er_include)/(mean(Beach.Length)*unique(num_survey)))
