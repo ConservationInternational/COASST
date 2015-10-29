@@ -140,18 +140,6 @@ for (i in 1:length(unique_beach_year_month)) {
       beach_date$er_include[which(beach_date$Is.Bird != "Yes")] <-0
       beach_date$case[which(beach_date$Is.Bird != "Yes")] <-3.1
       
-      # Check for inconsistencies in data. Error in tie number
-      #if (!("Yes" %in% unique(beach_date$Bird.Refound))) {
-      #  print(paste("Error. Tie number duplicated in a single survey: unique_beach_year_month index =",i))
-      #}
-      # This is duplicated above#########################
-      ## Get unique vector of all beach surveys in this beach/month
-      #unique_surveys<- unique(beach_date$Survey.Code)
-      ## Track the number of surveys per beach/month
-      #beach_date$num_survey <- length(unique_surveys)
-      #########################
-      # Create and index and for all refinds
-      #refind_index <- which(beach_date$Bird.Refound=="Yes")
       
       # MORE THAN ONE SURVEY PER BEACH/MONTH AND ANY REFINDS 
       # Remove all refinds when they were initially found in other beach/months
@@ -159,7 +147,6 @@ for (i in 1:length(unique_beach_year_month)) {
       beach_date_no <-filter(beach_date,Bird.Refound !="Yes")
       # Assingn er_include records where bird refinds = No to a 1 while taking into
       # account the previously assigned er_include 0 records
-      # beach_date_no$er_include[-which(beach_date_no$er_include == 0)] <- 1
       beach_date_no$er_include[which(is.na(beach_date_no$er_include))] <- 1
       #if record Is.Bird != "Yes" it got a 0 above and we want to keep it a zero, but give everything else a 1
       beach_date_no$er_include[which(beach_date_no$er_include !=0)] <- 1
