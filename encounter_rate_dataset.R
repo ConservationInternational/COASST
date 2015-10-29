@@ -214,7 +214,7 @@ for (i in 1:length(unique_beach_year_month)) {
 sysdate = Sys.Date()
 filename= paste("output_df",sysdate)
 save(output_df, file=filename,compress="gzip")
-write.csv(../Data_out/output_df,"coast_output_new.csv")
+write.csv(output_df,"../Data_out/coast_output_all.csv")
 
 # Code to quickly find out problems with this script. Find the beach/year/month
 # where there script broke.
