@@ -11,9 +11,10 @@
 # 7. Travel time should not be greater than 6 hours. Travel time is in the survey_volunteers table.
 # 8. For all birds (is.bird=no) all tie numbers/beach/year/month should be is.bird=no until the tie is reused.
 # 9. If collected = yes, tie number/beach/year/month should never be found again.
-# 10. Remind = yes & intact=yes should be rare. Look at all these instances. 
+# 10. Refind = yes & intact=yes should be rare. Look at all these instances. 
 # 11. Beach’s that have split into two (Need a list from Jane)…we want to ensure that a beach per month (the splits and original name) are not happening (ensure there is not data for original and the split)
 # 12. Tie numbers should never be NA or 0 with a bird code.  DONE 123 (did manually in excel)
+# 13. Check for duplicated tie numbers in a given survey
 
 # Load in the full dataset output
 #load("output_df 2015-07-07")  # From bird_data <- read.csv("COASST_RAW_AllYrs.csv")
