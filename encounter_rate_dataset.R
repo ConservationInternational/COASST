@@ -1,5 +1,5 @@
 # Encounter_rate.r
-
+#
 # Clear everything
 rm(list = ls())
 # Set your working directory
@@ -136,6 +136,7 @@ for (i in 1:length(unique_beach_year_month)) {
       # Case #3:MORE THAN ONE SURVEY AND ANY REFINDS or No Birds Founds (refinds = Yes or refinds = null)
       # Bird.Code = NA; means no birds.
       
+      #NO BIRDS
       beach_date$er_include[which(beach_date$Is.Bird != "Yes")] <-0
       beach_date$case[which(beach_date$Is.Bird != "Yes")] <-3.1
       
@@ -160,8 +161,10 @@ for (i in 1:length(unique_beach_year_month)) {
       # account the previously assigned er_include 0 records
       # beach_date_no$er_include[-which(beach_date_no$er_include == 0)] <- 1
       beach_date_no$er_include[which(is.na(beach_date_no$er_include))] <- 1
+      #if record Is.Bird != "Yes" it got a 0 above and we want to keep it a zero, but give everything else a 1
       beach_date_no$er_include[which(beach_date_no$er_include !=0)] <- 1
       beach_date_no$case[which(is.na(beach_date_no$case))] <- 3.2
+      
       # Pull out all the refinds
       beach_date_yes <-filter(beach_date,Bird.Refound=="Yes")
       
@@ -171,6 +174,7 @@ for (i in 1:length(unique_beach_year_month)) {
         # surveys with no birds found.
         beach_date <- beach_date_no
       } else if (nrow(beach_date_yes) > 0) {
+        #create a variable that contains all refinds that were not first found that beachmonth so we can remove from ER calc
         remove_tie_nums <-as.numeric()
         for (j in 1:nrow(beach_date_yes)) {
           # Remove refinds = Yes where Tie number exists AND Refind = No by comparing################CHECK THIS ASSUMPTION AGAIN WITH REFINDS
